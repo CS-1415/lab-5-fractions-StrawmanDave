@@ -8,11 +8,14 @@ public class MixedNumber : RationalNumber
 {
     private int WholeNumber;
     private RationalNumber PartialUnits;
-
     public MixedNumber(int _numerator, int _denominator) : this(new RationalNumber(_numerator,_denominator))
     {
-        RationalNumber rationalNumber = new RationalNumber(_numerator, _denominator);
-        new MixedNumber(rationalNumber);
+        if(_numerator > _denominator)
+        {
+            PartialUnits = new RationalNumber(_numerator, _denominator);
+            new MixedNumber(PartialUnits);
+        }
+
     }
 
     public MixedNumber(RationalNumber fraction)
@@ -24,12 +27,17 @@ public class MixedNumber : RationalNumber
 
     public void displayMixedNumber()
     {
-        if(WholeNumber > 0)
+        if(Math.Abs(WholeNumber) > 0)
         {
             Console.Write($"{WholeNumber} ");
-            if(PartialUnits.Numerator > 0)
+            if(PartialUnits.Numerator < 0)
             {
-                PartialUnits.ShowRationalNumber();
+                int newNumerator = Math.Abs(PartialUnits.Numerator) % Math.Abs(PartialUnits.Denominator);
+                Console.WriteLine($"{newNumerator}/{Math.Abs(PartialUnits.Denominator)}");
+            }else
+            {
+                int newNumerator = PartialUnits.Numerator % PartialUnits.Denominator;
+                Console.WriteLine($"{newNumerator}/{Math.Abs(PartialUnits.Denominator)}");
             }
         }else
         {
@@ -41,7 +49,7 @@ public class MixedNumber : RationalNumber
     {
         if(WholeNumber > 0)
         {
-            double combine = WholeNumber + PartialUnits.GetHashCode();
+            double combine = WholeNumber.GetHashCode() + PartialUnits.GetHashCode();
             return HashCode.Combine(combine);
         }else
         {
@@ -51,21 +59,34 @@ public class MixedNumber : RationalNumber
 
     public override bool Equals(object? obj)
     {
-        double combine = WholeNumber + PartialUnits.GetHashCode();
-        if(HashCode.Combine(combine) == obj.GetHashCode())
+        if(WholeNumber > 0)
         {
-            return true;
+            double combine = WholeNumber.GetHashCode() + PartialUnits.GetHashCode();
+            if(HashCode.Combine(combine) == obj.GetHashCode())
+            {
+                return true;
+            }else
+            {
+                return false;
+            }  
         }else
         {
-            return false;
-        }  
+            double newCombine = PartialUnits.Numerator/PartialUnits.Denominator;
+            if(HashCode.Combine(newCombine) == obj.GetHashCode())
+            {
+                return true;
+            }else
+            {
+                return false;
+            }
+        }
     }
 }
 
 public class RationalNumber
 {
-    public  int Numerator{get; private set;}
-    public  int Denominator{get; private set;}
+    public int Numerator{get; private set;}
+    public int Denominator{get; private set;}
 
     public RationalNumber()
     {

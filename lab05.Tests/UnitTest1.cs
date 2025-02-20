@@ -17,7 +17,7 @@ public class Tests
         Test6();
         Test7();
         Test8();
-        //Test9();
+        Test9();
         Test10();
     }
 
@@ -66,9 +66,9 @@ public class Tests
 
     public void Test9()
     {
-        MixedNumber canNotBeSimplified = new MixedNumber(1,2);
+        MixedNumber canNotBeSimplified = new MixedNumber(3,4);
         Console.WriteLine(canNotBeSimplified.GetHashCode());
-        Debug.Assert(canNotBeSimplified.Equals(new RationalNumber(1,2)));
+        Debug.Assert(canNotBeSimplified.Equals(new RationalNumber(3,4)));
         Console.WriteLine(new RationalNumber(1,2).GetHashCode());
     }
 
